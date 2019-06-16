@@ -6,7 +6,7 @@ Notely is a simple note taking app. This is designed to take notes and sorts the
 * Update Note.
 * Delete Note.
 * View Notes.
-
+# Signed APK Coming Soon
 # Features: 
 
 - [x] Add note.
