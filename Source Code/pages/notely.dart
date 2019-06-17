@@ -12,16 +12,16 @@ class Notes extends StatefulWidget {
 }
 
 class _NotesState extends State<Notes> {
-  
   DBHelper dbHelper = DBHelper();
   List<Note> noteList;
   num color = 0xffffffff;
 
   int c = 0;
-  void dispose(){
+  void dispose() {
     super.dispose();
     dbHelper.closeDB();
   }
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     if (noteList == null) {
@@ -29,6 +29,7 @@ class _NotesState extends State<Notes> {
       updateView();
     }
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         title: Text(
           "Notely",
@@ -38,40 +39,23 @@ class _NotesState extends State<Notes> {
         centerTitle: true,
         elevation: 0,
       ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0,
-        color: Color(0xff2680EB),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: FlatButton(
-                child: Text(
-                  "Add Note",
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddNote(
-                                note: Note(
-                                  "",
-                                  "",
-                                  color
-                                ),
-                                appTitle: "ADD Notely",
-                              )));
-                },
-              ),
-            ),
-          ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(Icons.add),
+        label: Text(
+          "Add Notely",
+          style: TextStyle(fontSize: 22),
         ),
+        backgroundColor: Color(0xff1578E8),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNote(
+                        note: Note("", "", color),
+                        appTitle: "ADD Notely",
+                      )));
+        },
       ),
       body: FutureBuilder(
         future: dbHelper.getNoteList(),
@@ -79,94 +63,59 @@ class _NotesState extends State<Notes> {
           if (shot.hasData) {
             noteList = shot.data;
             c = noteList.length;
-            return Center(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: 385,
-                    height: 170,
-                    decoration: BoxDecoration(
-                      color: Color(0xff2680EB),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 90, left: 30),
-                          child: Text("Hi", style: TextStyle(color: Colors.white, fontSize: 80, fontWeight: FontWeight.bold),),
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: c,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10),
+                  child: Card(
+                    color: Color(0xff2D2D2D),
+                    elevation: 3,
+                    child: ListTile(
+                      title: Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Text(
+                          this.noteList[index].title,
+                          style: TextStyle(
+                              color: Color(this.noteList[index].color),
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0, bottom: 20),
-                              child: Text("Notes" , style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w400),),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Text(c.toString() , style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w400),),
-                            )
-                          ],
-                        )
-                      ],
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 20),
+                        child: Text(
+                          this.noteList[index].body,
+                          style: TextStyle(
+                              color: Color(this.noteList[index].color),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.delete_sweep,
+                          size: 30,
+                          color: Color(0xffF3223F),
+                        ),
+                        onPressed: () {
+                          _delete(context, noteList[index]);
+                        },
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddNote(
+                                      note: this.noteList[index],
+                                      appTitle: "EDIT Notely",
+                                    )));
+                      },
                     ),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: c,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Card(
-                          color: Color(0xff2D2D2D),
-                          elevation: 3,
-                          child: ListTile(
-                            title: Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Text(
-                                this.noteList[index].title,
-                                style: TextStyle(
-                                    color: Color(this.noteList[index].color),
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.only(top: 20.0, bottom: 20),
-                              child: Text(
-                                this.noteList[index].body,
-                                style: TextStyle(
-                                    color: Color(this.noteList[index].color),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(
-                                Icons.delete_sweep,
-                                size: 30,
-                                color: Color(0xffF3223F),
-                              ),
-                              onPressed: () {
-                                _delete(context, noteList[index]);
-                              },
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddNote(
-                                            note: this.noteList[index],
-                                            appTitle: "EDIT Notely",
-                                          )));
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                );
+              },
             );
           }
           return Center(
@@ -197,8 +146,21 @@ class _NotesState extends State<Notes> {
     });
   }
 
+
+  void showBar(String txt, Color color){
+    final snackBar = SnackBar(
+      content: Text(txt),
+      backgroundColor: color,
+    );
+    _key.currentState.showSnackBar(snackBar);
+  }
+
+
   void _delete(BuildContext context, Note note) async {
     int result = await dbHelper.delete(note.id);
     updateView();
+    if(result != 0){
+      showBar("Notely Deleted", Colors.red);
+    }
   }
 }

@@ -19,12 +19,14 @@ class _AddNoteState extends State<AddNote> {
   Note note;
   String appTitle;
   num txtColor;
+  IconData btnIcon;
   String btnTxt;
   _AddNoteState(this.note, this.appTitle);
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   void initState() {
     super.initState();
     btnTxt = note.id == null ? "Add Notely" : "Save Notely";
+    btnIcon = note.id == null ? Icons.add : Icons.save_alt;
   }
 
   @override
@@ -32,8 +34,10 @@ class _AddNoteState extends State<AddNote> {
     _title.text = note.title;
     _body.text = note.body;
     txtColor = note.color == null ? 0xffffffff : note.color;
+    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
 
     return Scaffold(
+      key: _key,
       backgroundColor: Colors.black87,
       appBar: AppBar(
         backgroundColor: Colors.black87,
@@ -45,47 +49,47 @@ class _AddNoteState extends State<AddNote> {
         centerTitle: true,
         elevation: 0,
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xff2680EB),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: FlatButton(
-                child: Text(btnTxt,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  setState(() {
-                    _save();
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: FlatButton(
-                child: Text("Delete Notely",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  setState(() {
-                    _delete();
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: showFab
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FloatingActionButton.extended(
+                  icon: Icon(btnIcon),
+                  label: Text(
+                    btnTxt,
+                    style: TextStyle(fontSize: 22),
+                  ),
+                  heroTag: null,
+                  backgroundColor: Color(0xff1578E8),
+                  onPressed: () {
+                    setState(() {
+                      _save();
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                FloatingActionButton.extended(
+                  icon: Icon(Icons.delete_outline),
+                  label: Text(
+                    "Delete Notely",
+                    style: TextStyle(fontSize: 22),
+                  ),
+                  heroTag: null,
+                  backgroundColor: Color(0xffFF0053),
+                  onPressed: () {
+                    setState(() {
+                      _delete();
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            )
+          : null,
       body: ListView(children: <Widget>[
         Center(
           child: Column(
@@ -123,71 +127,59 @@ class _AddNoteState extends State<AddNote> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       //First
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: FlatButton(
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Color(0xff1578E8),
-                                borderRadius: BorderRadius.circular(50)),
-                          ),
-                          onPressed: () {
-                            setColor(0xff1578E8);
-                          },
+                      FlatButton(
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Color(0xff1578E8),
+                              borderRadius: BorderRadius.circular(50)),
                         ),
+                        onPressed: () {
+                          setColor(0xff1578E8);
+                        },
                       ),
                       //Second
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: FlatButton(
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Color(0xffFF0053),
-                                borderRadius: BorderRadius.circular(50)),
-                          ),
-                          onPressed: () {
-                            setColor(0xffFF0053);
-                          },
+                      FlatButton(
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Color(0xffFF0053),
+                              borderRadius: BorderRadius.circular(50)),
                         ),
+                        onPressed: () {
+                          setColor(0xffFF0053);
+                        },
                       ),
                       //third
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: FlatButton(
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Color(0xffFFE748),
-                                borderRadius: BorderRadius.circular(50)),
-                          ),
-                          onPressed: () {
-                            setColor(0xffFFE748);
-                          },
+                      FlatButton(
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Color(0xffFFE748),
+                              borderRadius: BorderRadius.circular(50)),
                         ),
+                        onPressed: () {
+                          setColor(0xffFFE748);
+                        },
                       ),
                       //forth
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: FlatButton(
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Color(0xff4FCC20),
-                                borderRadius: BorderRadius.circular(50)),
-                          ),
-                          onPressed: () {
-                            setColor(0xff4FCC20);
-                          },
+                      FlatButton(
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Color(0xffffffff),
+                              borderRadius: BorderRadius.circular(50)),
                         ),
+                        onPressed: () {
+                          setColor(0xffffffff);
+                        },
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
               Padding(
@@ -244,6 +236,10 @@ class _AddNoteState extends State<AddNote> {
       //inserts Note
       result = await dbHelper.insert(note);
     }
+    if(result != 0){
+      showBar("Notely Added", Colors.blue);
+    }
+    showBar("Error While Adding Note \n Please make sure you added title and body properly", Colors.red);
   }
 
   void _delete() async {
@@ -252,5 +248,17 @@ class _AddNoteState extends State<AddNote> {
     }
 
     int result = await dbHelper.delete(note.id);
+    if(result != 0){
+      showBar("Notely Deleted", Colors.red);
+    }
+    showBar("Error while deleting Notely", Colors.red);
+  }
+
+  void showBar(String txt, Color color){
+    final snackBar = SnackBar(
+      content: Text(txt),
+      backgroundColor: color,
+    );
+    _key.currentState.showSnackBar(snackBar);
   }
 }

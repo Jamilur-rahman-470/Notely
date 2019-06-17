@@ -1,6 +1,4 @@
 
-import 'dart:ui';
-
 class Note{
   int _id;
   String _title;
