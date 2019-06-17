@@ -13,6 +13,7 @@ class DBHelper{
   String colId = 'id';
   String colTitle = 'title';
   String colBody = 'body';
+  String colColor = 'color';
 
   DBHelper._instance(); //Named Constructor for Creating instance of DB helper
 
@@ -40,13 +41,13 @@ class DBHelper{
   }
   //create data table
   void _createDB(Database db, int ver) async{
-    await db.execute('CREATE TABLE $table($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT NOT NULL, $colBody TEXT NOT NULL)');
+    await db.execute('CREATE TABLE $table($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT NOT NULL, $colBody TEXT NOT NULL, $colColor NUM NOT NULL)');
   }
 
   // Get all note ordered by title
   Future<List<Map<String, dynamic>>> getNoteMap() async{
     Database db = await this.database;
-    var result = await db.query(table, orderBy: '$colTitle ASC');
+    var result = await db.query(table, orderBy: '$colId DESC');
     return result;
   }
 

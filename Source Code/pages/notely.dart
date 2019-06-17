@@ -12,8 +12,11 @@ class Notes extends StatefulWidget {
 }
 
 class _NotesState extends State<Notes> {
+  
   DBHelper dbHelper = DBHelper();
   List<Note> noteList;
+  num color = 0xffffffff;
+
   int c = 0;
   void dispose(){
     super.dispose();
@@ -60,6 +63,7 @@ class _NotesState extends State<Notes> {
                                 note: Note(
                                   "",
                                   "",
+                                  color
                                 ),
                                 appTitle: "ADD Notely",
                               )));
@@ -122,7 +126,7 @@ class _NotesState extends State<Notes> {
                               child: Text(
                                 this.noteList[index].title,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color(this.noteList[index].color),
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -132,7 +136,7 @@ class _NotesState extends State<Notes> {
                               child: Text(
                                 this.noteList[index].body,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color(this.noteList[index].color),
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500),
                               ),

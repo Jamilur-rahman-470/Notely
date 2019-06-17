@@ -16,7 +16,7 @@ Notely is a simple note taking app. This is designed to take notes and sorts the
 - [ ] Add Location to Notes and get updated when close to the location.
 - [ ] Add timer to your Notes.
 - [ ] Add images to Your Notes.
-- [ ] Custom text color, Note color, text style.
+- [x] Custom text color, Note color, text style.
 - [ ] Prioritize Notes. 
 
 # Implementation:
@@ -28,7 +28,7 @@ This app is built with **FLUTTER**. The app also can be viewed as a basic implem
 - [ ] Location.
 - [ ] Local Notification.
 - [ ] Priority Selection. 
-- [ ] Customizing Notes.
+- [x] Customizing Notes.
 
 # Screenshots:
 
